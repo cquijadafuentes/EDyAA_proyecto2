@@ -1,0 +1,11 @@
+En el ejercicio 3
+	Si se eliminan/comentan las líneas 61 y 74 (que tienen cout) el programa se cae.
+
+En el ejercicio 4
+	Las estructuras asociadas a rank pesan 0 B.
+
+En el ejercicio 5
+	Las matrices de 0s y 1s están creadas. Falta representar en k2-tree dichas matrices.
+
+En el ejercicio 6
+	En blanco...
