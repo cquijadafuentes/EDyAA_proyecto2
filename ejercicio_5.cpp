@@ -5,6 +5,7 @@
 #include <string.h>
 #include <cstring>
 #include <sdsl/int_vector_mapper.hpp>
+#include <sdsl/k2_tree.hpp>
 #include <iostream>
 
 using namespace std;
@@ -91,7 +92,22 @@ int main(int argc, char const *argv[]){
             cout << endl;
         }       
         free(temps);
-        
+
+        vector<k2_tree<2>> arbolesk2(matrices.size());
+        for(int i=0; i<matrices.size(); i++){
+            k2_tree<2> aux(matrices[i]);
+            arbolesk2[i] = aux;
+        }
+
+        for(int j=0; j<arbolesk2.size(); j++){
+            vector<long unsigned int> r = arbolesk2[j].neigh(0);
+            for(int i=0; i<r.size(); i++){
+                cout << r[i]<< endl;
+            }
+            cout << endl;
+        }
+
+
     }else{
         perror ("Error al abrir el directorio ");
     }
