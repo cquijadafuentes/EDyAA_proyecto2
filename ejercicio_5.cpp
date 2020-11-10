@@ -68,15 +68,7 @@ int main(int argc, char const *argv[]){
         // Matrices para guardar los 0s y 1s desde la 2 matriz en adelante
         // Crear un arreglo tridimensional para las n matrices de n x n cada una.
         // Memoria para las matrices
-        short*** matrices = new short**[totalFiles-1];
-        for(unsigned int i=0; i < totalFiles-1; i++){
-            //Memoria los punteros a las filas de cada matriz
-            matrices[i] = new short*[n];
-            for(unsigned int j=0; j< n; j++){
-                // Memoria para los enteros de cada fila
-                matrices[i][j] = new short[n];
-            }
-        }
+        vector<vector<vector<int>>> matrices(totalFiles-1, vector<vector<int>>(n, vector<int>(n)));
         // Índices para navegar en las matrices
         int nxn = n*n;          // Para mirar la celda de la matriz anterior en el arreglo
         int indTemps = nxn;     // Comienza en la celda [0][0] de la 2a matriz
@@ -99,20 +91,7 @@ int main(int argc, char const *argv[]){
             cout << endl;
         }       
         free(temps);
-
-
-
-
-
-
-        // Liberar memoria matrices
-        for(unsigned int i=0; i < totalFiles-1; i++){
-            for(unsigned int j=0; j< n; j++){
-                delete[] matrices[i][j];                
-            }
-            delete[] matrices[i];
-        }  
-        delete[] matrices;
+        
     }else{
         perror ("Error al abrir el directorio ");
     }
