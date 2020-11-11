@@ -11,6 +11,34 @@
 using namespace std;
 using namespace sdsl;
 
+typedef struct matrixsByK2treeA{
+    unsigned int n;
+    int_vector<> valores;           // Valores distintos de las matrices
+    int_vector<> pos;               // Posiciones donde comienzan los valores distintos de cada matriz
+    vector<k2_tree<2>> matricesk2;    // Matrices de k2-trees
+}MATRIXK2TREEA;
+
+void mktA_crear(int * temps, int n, unsigned int totalFiles);
+
+
+// MORTON DECODE 
+// http://asgerhoedt.dk/?p=276
+
+unsigned int CompactBy1(unsigned int x) {
+    x &= 0x55555555;                  // x = -f-e -d-c -b-a -9-8 -7-6 -5-4 -3-2 -1-0
+    x = (x ^ (x >>  1)) & 0x33333333; // x = --fe --dc --ba --98 --76 --54 --32 --10
+    x = (x ^ (x >>  2)) & 0x0f0f0f0f; // x = ---- fedc ---- ba98 ---- 7654 ---- 3210
+    x = (x ^ (x >>  4)) & 0x00ff00ff; // x = ---- ---- fedc ba98 ---- ---- 7654 3210
+    x = (x ^ (x >>  8)) & 0x0000ffff; // x = ---- ---- ---- ---- fedc ba98 7654 3210
+    return x;
+}
+
+pair<unsigned int, unsigned int> MortonDecode2(unsigned int c){
+    unsigned int x = CompactBy1(c >> 1);
+    unsigned int y = CompactBy1(c);
+    return pair<unsigned int, unsigned int>(x,y);
+}
+
 int main(int argc, char const *argv[]){
     if(argc < 4){
         printf("Error! Faltan argumentos.\n");
@@ -66,46 +94,88 @@ int main(int argc, char const *argv[]){
 
         }
         closedir(carpeta);
-        // Matrices para guardar los 0s y 1s desde la 2 matriz en adelante
-        // Crear un arreglo tridimensional para las n matrices de n x n cada una.
-        // Memoria para las matrices
-        vector<vector<vector<int>>> matrices;
-        // Índices para navegar en las matrices
-        int nxn = n*n;          // Para mirar la celda de la matriz anterior en el arreglo
-        int indTemps = nxn;     // Comienza en la celda [0][0] de la 2a matriz
         
-        for(unsigned int i=0; i < totalFiles-1; i++){
-            vector<vector<int>> auxMat(n, vector<int>(n,0));
-            for(unsigned int j=0; j< n; j++){
-                for(unsigned int k=0; k<n; k++){
-                    // Comparación para determinar valores 0 o 1 en cada celda
-                    if(temps[indTemps] != temps[indTemps-nxn]){
-                        auxMat[j][k] = 1;
-//                        cout << "1  ";
-                    }else{
-                        auxMat[j][k] = 0;
-//                        cout << "0  ";
-                    }
-                    indTemps++;
-                }
-                matrices.push_back(auxMat);
-//                cout << endl;
-            }
-//            cout << endl;
-        }       
-        free(temps);
-        int sizeInBytesK2trees = 0;
-        vector<k2_tree<2>> arbolesk2(matrices.size());
-        for(int i=0; i<matrices.size(); i++){
-            k2_tree<2> aux(matrices[i]);
-            arbolesk2[i] = aux;
-            sizeInBytesK2trees += size_in_bytes(aux);
-        }
+        mktA_crear(temps, n, (unsigned int)totalFiles);
 
-        cout << "k2_trees size in KyloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
+        free(temps);
 
 
     }else{
         perror ("Error al abrir el directorio ");
     }
+}
+
+
+void mktA_crear(int * temps, int n, unsigned int totalFiles){
+
+    MATRIXK2TREEA edcMK2T;
+    edcMK2T.n = n;
+
+    // Matrices para guardar los 0s y 1s desde la 2 matriz en adelante
+    // Crear un arreglo tridimensional para las n matrices de n x n cada una.
+    // Memoria para las matrices
+    vector<vector<vector<int>>> matrices;
+    // Índices para navegar en las matrices
+    unsigned int nxn = n*n;          // Para mirar la celda de la matriz anterior en el arreglo
+    unsigned int indTemps = nxn;     // Comienza en la celda [0][0] de la 2a matriz
+    unsigned int cantMaxVD = nxn*(totalFiles);    // Máxima cantidad de valores distintos posibles
+    edcMK2T.valores = int_vector<> (cantMaxVD);
+    edcMK2T.pos = int_vector<> (totalFiles);     // Indica dónde comienzan los valores para cada matriz rep x k2tree
+    unsigned int cantVD = 0;
+    unsigned int x = 0;
+    unsigned int y = 0;
+    unsigned int pbase = 0;
+    
+    // Las matrices están almacenadas en un arreglo de valores de tamaño nxn*(totalFiles-1)
+    // La estrategia es calcular generar la decodificación del j-ésimo código Morton, que indica
+    // la posición x,y en la matriz que luego será representada en k2-tree y esa celda se corresponde con
+    // la posición pbase+(x*n)+y en el arreglo de valores
+    // pbase toma valores en nxn * i (implícitamente);
+
+    // Primero se guarda toda la primera matriz en el arreglo de valores diferentes
+    // Se considera la primera matriz como toda diferente porque no tiene con qué compararse
+    for(unsigned int i=0; i<nxn; i++){
+        edcMK2T.valores[i]=temps[i];
+    }
+    cantVD = nxn;
+    for(unsigned int i=0; i < totalFiles-1; i++){
+        edcMK2T.pos[i] = cantVD;
+        vector<vector<int>> auxMat(n, vector<int>(n,0));
+        pbase += nxn;
+        for(unsigned int j=0; j< nxn; j++){
+            pair<unsigned int, unsigned int> xy = MortonDecode2(j);
+            x = xy.first;
+            y = xy.second;
+            indTemps = pbase + x*n + y;
+            if(temps[indTemps] != temps[indTemps-nxn]){
+                auxMat[x][y] = 1;
+                edcMK2T.valores[cantVD++] = temps[indTemps];
+            }
+            indTemps++;
+        }
+        matrices.push_back(auxMat);
+    }
+    // Ajustar tamaño del arreglo de valores según los encontrados.
+    edcMK2T.valores.resize(cantVD);
+
+    int sizeInBytesK2trees = 0;
+    edcMK2T.matricesk2 = vector<k2_tree<2>>(matrices.size());
+    
+    for(unsigned int i=0; i<matrices.size(); i++){
+        cout << "Mat[" << i << "]" << endl;
+        for(int j = 0; j<n; j++){
+            for(int k=0; k<n; k++){
+                cout << matrices[i][j][k] << " ";
+            }
+            cout << endl;
+        }
+        //k2_tree<2> aux(matrices[i]);
+        //edcMK2T.matricesk2[i] = aux;
+        edcMK2T.matricesk2[i] = k2_tree<2>(matrices[i]);
+        sizeInBytesK2trees += size_in_bytes(edcMK2T.matricesk2[i]);
+    }
+
+    cout << "Cantidad de valores diferentes: " << edcMK2T.valores.size() - nxn << endl;
+
+    cout << "k2_trees size in KiloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
 }

@@ -88,21 +88,28 @@ int main(int argc, char const *argv[]){
                     }
                     indTemps++;
                 }
-                matrices.push_back(auxMat);
 //                cout << endl;
             }
+            matrices.push_back(auxMat);
 //            cout << endl;
         }       
         free(temps);
         int sizeInBytesK2trees = 0;
         vector<k2_tree<2>> arbolesk2(matrices.size());
         for(int i=0; i<matrices.size(); i++){
+            cout << "Mat[" << i << "]" << endl;
+            for(int j = 0; j<n; j++){
+                for(int k=0; k<n; k++){
+                    cout << matrices[i][j][k] << " ";
+                }
+                cout << endl;
+            }
             k2_tree<2> aux(matrices[i]);
             arbolesk2[i] = aux;
             sizeInBytesK2trees += size_in_bytes(aux);
         }
 
-        cout << "k2_trees size in KyloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
+        cout << "k2_trees size in KiloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
 
 
     }else{

@@ -115,13 +115,13 @@ int main(int argc, char const *argv[]){
         cout << endl;
 */
         printf("************ bit_vector ************\n");
-        cout << "int_vector in mega bytes: " << size_in_bytes(bv_t) << "[B]" << endl;
+        cout << "int_vector in bytes: " << size_in_bytes(bv_t) << "[B]" << endl;
         printf("************ rrr_vector ************\n");
-        cout << "rrr_vector in mega bytes: " << size_in_bytes(rrrb_t) << "[B]" << endl;
-        cout << "rank_rrr_vector in mega bytes: " << size_in_bytes(rank_rrrb_t) << "[B]" << endl;
+        cout << "rrr_vector in bytes: " << size_in_bytes(rrrb_t) << "[B]" << endl;
+        cout << "rank_rrr_vector in bytes: " << size_in_bytes(rank_rrrb_t) << "[B]" << endl;
         printf("************ sd_vector ************\n");
-        cout << "sd_vector in mega bytes: " << size_in_bytes(sdb_t) << "[B]" << endl;
-        cout << "rank_sd_vector in mega bytes: " << size_in_bytes(rank_sdb_t) << "[B]" << endl;
+        cout << "sd_vector in bytes: " << size_in_bytes(sdb_t) << "[B]" << endl;
+        cout << "rank_sd_vector in bytes: " << size_in_bytes(rank_sdb_t) << "[B]" << endl;
         
 /*
         for(int i=0; i<ptemps; i++){
