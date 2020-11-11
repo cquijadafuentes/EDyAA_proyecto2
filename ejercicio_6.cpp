@@ -7,6 +7,7 @@
 #include <sdsl/int_vector_mapper.hpp>
 #include <sdsl/k2_tree.hpp>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 using namespace sdsl;
@@ -16,9 +17,17 @@ typedef struct matrixsByK2treeA{
     int_vector<> valores;           // Valores distintos de las matrices
     int_vector<> pos;               // Posiciones donde comienzan los valores distintos de cada matriz
     vector<k2_tree<2>> matricesk2;    // Matrices de k2-trees
-}MATRIXK2TREEA;
+}MATRIXK2TREE;
 
+// Primera aproximación de ED para guardar las matrices en k2tree
+// Desventaja: obtener el valor de una celda, en el peor caso, explora todas las celdas.
 void mktA_crear(int * temps, int n, unsigned int totalFiles);
+
+
+// Segunda aproximación
+// Cada log_2(n) matrices, se almacena una versión completa
+// obtener el valor de una celda, en el peor caso, explora log_2(n) celdas
+void mktB_crear(int * temps, int n, unsigned int totalFiles);
 
 
 // MORTON DECODE 
@@ -96,6 +105,7 @@ int main(int argc, char const *argv[]){
         closedir(carpeta);
         
         mktA_crear(temps, n, (unsigned int)totalFiles);
+        mktB_crear(temps, n, (unsigned int)totalFiles);
 
         free(temps);
 
@@ -107,8 +117,8 @@ int main(int argc, char const *argv[]){
 
 
 void mktA_crear(int * temps, int n, unsigned int totalFiles){
-
-    MATRIXK2TREEA edcMK2T;
+    cout << "*** PROPUESTA A ***" << endl;
+    MATRIXK2TREE edcMK2T;
     edcMK2T.n = n;
 
     // Matrices para guardar los 0s y 1s desde la 2 matriz en adelante
@@ -151,7 +161,6 @@ void mktA_crear(int * temps, int n, unsigned int totalFiles){
                 auxMat[x][y] = 1;
                 edcMK2T.valores[cantVD++] = temps[indTemps];
             }
-            indTemps++;
         }
         matrices.push_back(auxMat);
     }
@@ -169,8 +178,83 @@ void mktA_crear(int * temps, int n, unsigned int totalFiles){
             }
             cout << endl;
         }
-        //k2_tree<2> aux(matrices[i]);
-        //edcMK2T.matricesk2[i] = aux;
+        edcMK2T.matricesk2[i] = k2_tree<2>(matrices[i]);
+        sizeInBytesK2trees += size_in_bytes(edcMK2T.matricesk2[i]);
+    }
+
+    cout << "Cantidad de valores diferentes: " << edcMK2T.valores.size() - nxn << endl;
+
+    cout << "k2_trees size in KiloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
+}
+
+
+void mktB_crear(int * temps, int n, unsigned int totalFiles){
+    cout << "*** PROPUESTA B ***" << endl;
+    MATRIXK2TREE edcMK2T;
+    edcMK2T.n = n;
+
+    // Matrices para guardar los 0s y 1s desde la 2 matriz en adelante
+    // Crear un arreglo tridimensional para las n matrices de n x n cada una.
+    // Memoria para las matrices
+    vector<vector<vector<int>>> matrices;
+    // Índices para navegar en las matrices
+    unsigned int nxn = n*n;          // Para mirar la celda de la matriz anterior en el arreglo
+    unsigned int indTemps = nxn;     // Comienza en la celda [0][0] de la 2a matriz
+    unsigned int cantMaxVD = nxn*(totalFiles);    // Máxima cantidad de valores distintos posibles
+    edcMK2T.valores = int_vector<> (cantMaxVD);
+    edcMK2T.pos = int_vector<> (totalFiles);     // Indica dónde comienzan los valores para cada matriz rep x k2tree
+    unsigned int cantVD = 0;
+    unsigned int x = 0;
+    unsigned int y = 0;
+    unsigned int pbase = 0;
+
+    // Similar al proceso anterior
+    unsigned int log2n = (unsigned int) log2(totalFiles);
+    for(unsigned int i=0; i < totalFiles; i++){
+        bool inicioBloque = i%log2n == 0;
+        edcMK2T.pos[i] = cantVD;
+        if(!inicioBloque){
+            // Si no es un inicio de bloque, se hace como la primera propuesta A
+            vector<vector<int>> auxMat(n, vector<int>(n,0));
+            for(unsigned int j=0; j< nxn; j++){
+                pair<unsigned int, unsigned int> xy = MortonDecode2(j);
+                x = xy.first;
+                y = xy.second;
+                indTemps = pbase + x*n + y;
+                if(temps[indTemps] != temps[indTemps-nxn]){
+                    auxMat[x][y] = 1;
+                    edcMK2T.valores[cantVD++] = temps[indTemps];
+                }
+            }
+            matrices.push_back(auxMat);
+        }else{
+            // En inicio de bloque se copian todas las celdas como si fuera un valor
+            // diferente de la matriz anterior
+            // Se debe mantener el recorrido de Morton
+            for(unsigned int j=0; j< nxn; j++){
+                pair<unsigned int, unsigned int> xy = MortonDecode2(j);
+                x = xy.first;
+                y = xy.second;
+                indTemps = pbase + x*n + y;
+                edcMK2T.valores[cantVD++] = temps[indTemps];
+            }
+        }
+        pbase += nxn;
+    }
+    // Ajustar tamaño del arreglo de valores según los encontrados.
+    edcMK2T.valores.resize(cantVD);
+
+    int sizeInBytesK2trees = 0;
+    edcMK2T.matricesk2 = vector<k2_tree<2>>(matrices.size());
+    
+    for(unsigned int i=0; i<matrices.size(); i++){
+        cout << "Mat[" << i << "]" << endl;
+        for(int j = 0; j<n; j++){
+            for(int k=0; k<n; k++){
+                cout << matrices[i][j][k] << " ";
+            }
+            cout << endl;
+        }
         edcMK2T.matricesk2[i] = k2_tree<2>(matrices[i]);
         sizeInBytesK2trees += size_in_bytes(edcMK2T.matricesk2[i]);
     }
