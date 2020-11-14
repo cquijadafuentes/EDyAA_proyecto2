@@ -22,8 +22,8 @@ int main(int argc, char const *argv[]){
         return -1;
     }
 
-    int const totalFiles = (int) atoi(argv[2]);
-    int const n = (int) atoi(argv[3]);
+    unsigned int const totalFiles = (int) atoi(argv[2]);
+    unsigned int const n = (int) atoi(argv[3]);
 
     DIR *carpeta;
     struct dirent *archivo;
@@ -45,12 +45,12 @@ int main(int argc, char const *argv[]){
             if (myfile.is_open()){
                 // Por cada archivo se exploran las líneas
                 while (getline(myfile,line)){
-                    char* linea = new char [line.length()+1];
-                    char* lin_respaldo = linea; // Para liberar memoria posteriormente
+                    char* linea_op = new char [line.length()+1];    // Puntero original que se debe liberar
+                    char* linea = linea_op;                         // Para moverse en la linea
                     strcpy (linea, line.c_str());
                     int offset;
                     // Y cada línea contiene n enteros
-                    for(int i=0; i<n && ptemps < cantTemps; i++){
+                    for(unsigned int i=0; i<n && ptemps < cantTemps; i++){
                         sscanf(linea," %d%n", &temps[ptemps], &offset);
                         linea += offset;
                         // Cada entero se guarda en un arreglo
@@ -59,7 +59,7 @@ int main(int argc, char const *argv[]){
                         }
                         ptemps++;
                     }
-                    delete(lin_respaldo);
+                    delete(linea_op);
                 }
                 myfile.close();
             }
@@ -96,14 +96,15 @@ int main(int argc, char const *argv[]){
         free(temps);
         int sizeInBytesK2trees = 0;
         vector<k2_tree<2>> arbolesk2(matrices.size());
-        for(int i=0; i<matrices.size(); i++){
-            cout << "Mat[" << i << "]" << endl;
-            for(int j = 0; j<n; j++){
-                for(int k=0; k<n; k++){
+        for(unsigned int i=0; i<matrices.size(); i++){
+            /*
+            for(unsigned int j = 0; j<n; j++){
+                for(unsigned int k=0; k<n; k++){
                     cout << matrices[i][j][k] << " ";
                 }
                 cout << endl;
             }
+            */
             k2_tree<2> aux(matrices[i]);
             arbolesk2[i] = aux;
             sizeInBytesK2trees += size_in_bytes(aux);
