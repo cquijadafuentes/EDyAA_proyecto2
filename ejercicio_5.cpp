@@ -37,7 +37,7 @@ int main(int argc, char const *argv[]){
         while ((archivo = readdir(carpeta))) {
             // Se explora el directorio archivo por archivo
             string line;
-            char filename[strlen(archivo->d_name) + strlen(argv[1] + 2)];
+            char filename[strlen(archivo->d_name) + strlen(argv[1]) + 2];
             strcpy(filename, argv[1]);
             strcat(filename, "/");
             strcat(filename, archivo->d_name);
@@ -66,6 +66,8 @@ int main(int argc, char const *argv[]){
 
         }
         closedir(carpeta);
+
+        clock_t start = clock();
         // Matrices para guardar los 0s y 1s desde la 2 matriz en adelante
         // Crear un arreglo tridimensional para las n matrices de n x n cada una.
         // Memoria para las matrices
@@ -93,8 +95,7 @@ int main(int argc, char const *argv[]){
             matrices.push_back(auxMat);
 //            cout << endl;
         }       
-        free(temps);
-        int sizeInBytesK2trees = 0;
+        double sizeInMegaBytesK2trees = 0.0;
         vector<k2_tree<2>> arbolesk2(matrices.size());
         for(unsigned int i=0; i<matrices.size(); i++){
             /*
@@ -107,11 +108,14 @@ int main(int argc, char const *argv[]){
             */
             k2_tree<2> aux(matrices[i]);
             arbolesk2[i] = aux;
-            sizeInBytesK2trees += size_in_bytes(aux);
+            sizeInMegaBytesK2trees += size_in_mega_bytes(aux);
         }
+        double time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        time *= 1000;        // A milisegundos
 
-        cout << "k2_trees size in KiloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
-
+        free(temps);
+        cout << "k2_trees size in KiloBytes: " << sizeInMegaBytesK2trees << " [MB]" << endl;
+        cout << "Tiempo de la construcción: " << time << " [ms]" << endl;
 
     }else{
         perror ("Error al abrir el directorio ");

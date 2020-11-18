@@ -1,0 +1,282 @@
+--------------- EJERCICIO 2 (8x8) ---------------
+Cantidad de temperaturas guardadas: 7680/7680
+max_temp: 27
+Bits necesarios: 5
+width antes de bit_compress: 64 bits.
+int_vector in mega bytes: 0.0586023[MB]
+width despues de bit_compress: 5 bits.
+int_vector in mega bytes: 0.00458622[MB]
+Cantidad de temperaturas guardadas: 7680 temperaturas.
+************ TOTALES ************
+Tiempo de la construcción: 0.22 [ms]
+Memoria requerida en la representación: 0.00458622[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 2 (128x128) ---------------
+Cantidad de temperaturas guardadas: 1966080/1966080
+max_temp: 37
+Bits necesarios: 6
+width antes de bit_compress: 64 bits.
+int_vector in mega bytes: 15[MB]
+width despues de bit_compress: 6 bits.
+int_vector in mega bytes: 1.40626[MB]
+Cantidad de temperaturas guardadas: 1966080 temperaturas.
+************ TOTALES ************
+Tiempo de la construcción: 39.763 [ms]
+Memoria requerida en la representación: 1.40626[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 2 (512x512) ---------------
+Cantidad de temperaturas guardadas: 31457280/31457280
+max_temp: 40
+Bits necesarios: 6
+width antes de bit_compress: 64 bits.
+int_vector in mega bytes: 240[MB]
+width despues de bit_compress: 6 bits.
+int_vector in mega bytes: 22.5[MB]
+Cantidad de temperaturas guardadas: 31457280 temperaturas.
+************ TOTALES ************
+Tiempo de la construcción: 695.642 [ms]
+Memoria requerida en la representación: 22.5[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 3 (8x8) ---------------
+Cantidad de temperaturas guardadas: 7680/7680
+max_temp: 27
+Bits necesarios: 5
+************ int_vector ************
+width antes de bit_compress: 64
+int_vector in mega bytes: 0.00328159[MB]
+width despues de bit_compress: 5 bits por entero
+int_vector in mega bytes: 0.000267982[MB]
+int_vector size: 429 temperaturas.
+************ bit_vector ************
+bit_vector in mega bytes: 0.000923157[MB]
+bit_vector size: 7680 temperaturas.
+************ TOTALES ************
+Tiempo de la construcción: 0.059 [ms]
+Memoria requerida en la representación: 0.00119114[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 3 (128x128) ---------------
+Cantidad de temperaturas guardadas: 1966080/1966080
+max_temp: 37
+Bits necesarios: 6
+************ int_vector ************
+width antes de bit_compress: 64
+int_vector in mega bytes: 1.4398[MB]
+width despues de bit_compress: 5 bits por entero
+int_vector in mega bytes: 0.112496[MB]
+int_vector size: 188716 temperaturas.
+************ bit_vector ************
+bit_vector in mega bytes: 0.234383[MB]
+bit_vector size: 1966080 temperaturas.
+************ TOTALES ************
+Tiempo de la construcción: 15.893 [ms]
+Memoria requerida en la representación: 0.346879[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 3 (512x512) ---------------
+Cantidad de temperaturas guardadas: 31457280/31457280
+max_temp: 40
+Bits necesarios: 6
+************ int_vector ************
+width antes de bit_compress: 64
+int_vector in mega bytes: 49.5944[MB]
+width despues de bit_compress: 5 bits por entero
+int_vector in mega bytes: 3.87457[MB]
+int_vector size: 6500439 temperaturas.
+************ bit_vector ************
+bit_vector in mega bytes: 3.75001[MB]
+bit_vector size: 31457280 temperaturas.
+************ TOTALES ************
+Tiempo de la construcción: 339.564 [ms]
+Memoria requerida en la representación: 7.62458[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 4 (8x8) ---------------
+Cantidad de temperaturas guardadas: 7680/7680
+max_temp: 27
+Bits necesarios: 5
+************ int_vector ************
+width antes de bit_compress: 64
+int_vector in mega bytes: 0.00328159[MB]
+width despues de bit_compress: 5 bits por entero
+int_vector in mega bytes: 0.000267982[MB]
+int_vector size: 429 temperaturas.
+************ bit_vector ************
+bit_vector in mega bytes: 0.000923157[MB]
+bit_vector size: 7680 temperaturas.
+************ rrr_vector ************
+rrr_vector in bytes: 0.000369072[MB]
+rank_rrr_vector in bytes: 0[MB]
+************ sd_vector ************
+sd_vector in bytes: 0.000577927[MB]
+rank_sd_vector in bytes: 0[MB]
+************ TOTALES ************
+Tiempo hasta bit_vector: 0.066 [ms]
+Tiempo construcción rrr_vector y soporte rank: 0.013 [ms] (Total: 0.079 [ms]
+Memoria requerida en la representación con rrr_vector: 0.000637054[MB]
+Tiempo construcción sd_vector y soporte rank: 0.039 [ms] (Total: 0.105 [ms]
+Memoria requerida en la representación con sd_vector: 0.000845909[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 4 (128x128) ---------------
+Cantidad de temperaturas guardadas: 1966080/1966080
+max_temp: 37
+Bits necesarios: 6
+************ int_vector ************
+width antes de bit_compress: 64
+int_vector in mega bytes: 1.4398[MB]
+width despues de bit_compress: 5 bits por entero
+int_vector in mega bytes: 0.112496[MB]
+int_vector size: 188716 temperaturas.
+************ bit_vector ************
+bit_vector in mega bytes: 0.234383[MB]
+bit_vector size: 1966080 temperaturas.
+************ rrr_vector ************
+rrr_vector in bytes: 0.110873[MB]
+rank_rrr_vector in bytes: 0[MB]
+************ sd_vector ************
+sd_vector in bytes: 0.143069[MB]
+rank_sd_vector in bytes: 0[MB]
+************ TOTALES ************
+Tiempo hasta bit_vector: 15.791 [ms]
+Tiempo construcción rrr_vector y soporte rank: 3.682 [ms] (Total: 19.473 [ms]
+Memoria requerida en la representación con rrr_vector: 0.22337[MB]
+Tiempo construcción sd_vector y soporte rank: 4.995 [ms] (Total: 20.786 [ms]
+Memoria requerida en la representación con sd_vector: 0.255566[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 4 (512x512) ---------------
+Cantidad de temperaturas guardadas: 31457280/31457280
+max_temp: 40
+Bits necesarios: 6
+************ int_vector ************
+width antes de bit_compress: 64
+int_vector in mega bytes: 49.5944[MB]
+width despues de bit_compress: 5 bits por entero
+int_vector in mega bytes: 3.87457[MB]
+int_vector size: 6500439 temperaturas.
+************ bit_vector ************
+bit_vector in mega bytes: 3.75001[MB]
+bit_vector size: 31457280 temperaturas.
+************ rrr_vector ************
+rrr_vector in bytes: 2.89397[MB]
+rank_rrr_vector in bytes: 0[MB]
+************ sd_vector ************
+sd_vector in bytes: 3.75084[MB]
+rank_sd_vector in bytes: 0[MB]
+************ TOTALES ************
+Tiempo hasta bit_vector: 343.763 [ms]
+Tiempo construcción rrr_vector y soporte rank: 100.475 [ms] (Total: 444.238 [ms]
+Memoria requerida en la representación con rrr_vector: 6.76854[MB]
+Tiempo construcción sd_vector y soporte rank: 180.69 [ms] (Total: 524.453 [ms]
+Memoria requerida en la representación con sd_vector: 7.62541[MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 5 (8x8) ---------------
+k2_trees size in KiloBytes: 0.00623798 [MB]
+Tiempo de la construcción: 1.891 [ms]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 5 (128x128) ---------------
+k2_trees size in KiloBytes: 0.222211 [MB]
+Tiempo de la construcción: 106.798 [ms]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 5 (512x512) ---------------
+k2_trees size in KiloBytes: 5.2026 [MB]
+Tiempo de la construcción: 2629.36 [ms]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 6 (8x8) ---------------
+n: 8
+n: 8
+*** PROPUESTA A ***
+Tamaño de int_vectors antes de bit_compress: 0.0315046 [MB]
+Tamaño de int_vectors despues de bit_compress: 0.00209332 [MB]
+Temperatura mínima: 26
+Diferencia mínima: -5
+Cantidad de valores diferentes: 3879
+k2_trees size in KiloBytes: 0.00623798 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 1.984 [ms]
+Tamaño de la estructura: 0.0083313 [MB]
+*** PROPUESTA B ***
+Tamaño de int_vectors antes de bit_compress: 0.0348234 [MB]
+Tamaño de int_vectors despues de bit_compress: 0.00199413 [MB]
+Temperatura mínima: 24
+Diferencia mínima: -5
+Cantidad de valores diferentes: 3117
+k2_trees size in KiloBytes: 0.00522995 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 1.655 [ms]
+Tamaño de la estructura: 0.00722408 [MB]
+*** PROPUESTA C ***
+Tamaño de int_vectors antes de bit_compress: 0.0346251 [MB]
+Tamaño de int_vectors despues de bit_compress: 0.00160503 [MB]
+Temperatura mínima: 24
+Diferencia mínima: -4
+Cantidad de valores diferentes: 3091
+k2_trees size in KiloBytes: 0.0053215 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 1.704 [ms]
+Tamaño de la estructura: 0.00692654 [MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 6 (128x128) ---------------
+n: 128
+n: 128
+*** PROPUESTA A ***
+Tamaño de int_vectors antes de bit_compress: 8.30244 [MB]
+Tamaño de int_vectors despues de bit_compress: 0.64889 [MB]
+Temperatura mínima: 8
+Diferencia mínima: -15
+Cantidad de valores diferentes: 1055327
+k2_trees size in KiloBytes: 0.222211 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 219.404 [ms]
+Tamaño de la estructura: 0.871101 [MB]
+*** PROPUESTA B ***
+Tamaño de int_vectors antes de bit_compress: 9.3524 [MB]
+Tamaño de int_vectors despues de bit_compress: 0.730868 [MB]
+Temperatura mínima: 6
+Diferencia mínima: -15
+Cantidad de valores diferentes: 881671
+k2_trees size in KiloBytes: 0.186741 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 151.926 [ms]
+Tamaño de la estructura: 0.917609 [MB]
+*** PROPUESTA C ***
+Tamaño de int_vectors antes de bit_compress: 9.13714 [MB]
+Tamaño de int_vectors despues de bit_compress: 0.714053 [MB]
+Temperatura mínima: 6
+Diferencia mínima: -13
+Cantidad de valores diferentes: 853456
+k2_trees size in KiloBytes: 0.181667 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 179.037 [ms]
+Tamaño de la estructura: 0.89572 [MB]
+++++++++++++++++++++++++++++++++++++++++++++++
+--------------- EJERCICIO 6 (512x512) ---------------
+n: 512
+n: 512
+*** PROPUESTA A ***
+Tamaño de int_vectors antes de bit_compress: 229.969 [MB]
+Tamaño de int_vectors despues de bit_compress: 21.4974 [MB]
+Temperatura mínima: 13
+Diferencia mínima: -29
+Cantidad de valores diferentes: 29618032
+k2_trees size in KiloBytes: 5.2026 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 3696.22 [ms]
+Tamaño de la estructura: 26.7 [MB]
+*** PROPUESTA B ***
+Tamaño de int_vectors antes de bit_compress: 231.844 [MB]
+Tamaño de int_vectors despues de bit_compress: 21.7357 [MB]
+Temperatura mínima: 5
+Diferencia mínima: -28
+Cantidad de valores diferentes: 24883183
+k2_trees size in KiloBytes: 4.37314 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 3572.83 [ms]
+Tamaño de la estructura: 26.1088 [MB]
+*** PROPUESTA C ***
+Tamaño de int_vectors antes de bit_compress: 226.344 [MB]
+Tamaño de int_vectors despues de bit_compress: 21.22 [MB]
+Temperatura mínima: 5
+Diferencia mínima: -29
+Cantidad de valores diferentes: 24162289
+k2_trees size in KiloBytes: 4.28859 [MB]
+************ TOTALES ************
+Tiempo de la construcción: 3602.05 [ms]
+Tamaño de la estructura: 25.5086 [MB]
+++++++++++++++++++++++++++++++++++++++++++++++

@@ -89,7 +89,7 @@ int main(int argc, char const *argv[]){
         while ((archivo = readdir(carpeta))) {
             // Se explora el directorio archivo por archivo
             string line;
-            char filename[strlen(archivo->d_name) + strlen(argv[1] + 2)];
+            char filename[strlen(archivo->d_name) + strlen(argv[1]) + 2];
             strcpy(filename, argv[1]);
             strcat(filename, "/");
             strcat(filename, archivo->d_name);
@@ -134,6 +134,7 @@ cout << "n: " << n << endl;
 
 void mktA_crear(int * temps, unsigned int n, unsigned int totalFiles){
     cout << "*** PROPUESTA A ***" << endl;
+    clock_t start = clock();
     MATRIXK2TREE edcMK2T;
     edcMK2T.n = n;
 
@@ -194,8 +195,8 @@ void mktA_crear(int * temps, unsigned int n, unsigned int totalFiles){
     // Ajustar tamaño del arreglo de valores según los encontrados.
     edcMK2T.valoresD.resize(cantVD);
 
-    unsigned int sizeAntes = size_in_bytes(edcMK2T.valoresD) + size_in_bytes(edcMK2T.valoresC);
-    sizeAntes += size_in_bytes(edcMK2T.pos);
+    double sizeAntes = size_in_mega_bytes(edcMK2T.valoresD) + size_in_mega_bytes(edcMK2T.valoresC);
+    sizeAntes += size_in_mega_bytes(edcMK2T.pos);
 
     // Ajustar valores de diferencias y temperaturas para que comiencen desde 0 y 
     // así mejorar la comresión del int_vector
@@ -209,10 +210,10 @@ void mktA_crear(int * temps, unsigned int n, unsigned int totalFiles){
     util::bit_compress(edcMK2T.valoresC);
     util::bit_compress(edcMK2T.pos);
 
-    unsigned int sizeDespues = size_in_bytes(edcMK2T.valoresD) + size_in_bytes(edcMK2T.valoresC);
-    sizeDespues += size_in_bytes(edcMK2T.pos);
+    double sizeDespues = size_in_mega_bytes(edcMK2T.valoresD) + size_in_mega_bytes(edcMK2T.valoresC);
+    sizeDespues += size_in_mega_bytes(edcMK2T.pos);
 
-    int sizeInBytesK2trees = 0;
+    double sizeK2trees = 0.0;
     edcMK2T.matricesk2 = vector<k2_tree<2>>(matrices.size());
     for(unsigned int i=0; i<matrices.size(); i++){
         /*
@@ -225,22 +226,30 @@ void mktA_crear(int * temps, unsigned int n, unsigned int totalFiles){
         }
         */
         edcMK2T.matricesk2[i] = k2_tree<2>(matrices[i]);
-        sizeInBytesK2trees += size_in_bytes(edcMK2T.matricesk2[i]);
+        sizeK2trees += size_in_mega_bytes(edcMK2T.matricesk2[i]);
     }
+    double time = (double)(clock() - start) / CLOCKS_PER_SEC;
+    time *= 1000;        // A milisegundos
 
-    cout << "Tamaño de int_vectors antes: " << sizeAntes/1024 << " [KB]" << endl;
-    cout << "Tamaño de int_vectors despues: " << sizeDespues/1024 << " [KB]" << endl;
+    cout << "Tamaño de int_vectors antes de bit_compress: " << sizeAntes << " [MB]" << endl;
+    cout << "Tamaño de int_vectors despues de bit_compress: " << sizeDespues << " [MB]" << endl;
 
     cout << "Temperatura mínima: " << edcMK2T.minimaTemperatura << endl;
     cout << "Diferencia mínima: " << edcMK2T.minimaDiferencia << endl;
 
     cout << "Cantidad de valores diferentes: " << edcMK2T.valoresD.size() - nxn << endl;
-    cout << "k2_trees size in KiloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
+    cout << "k2_trees size in KiloBytes: " << sizeK2trees << " [MB]" << endl;
+    
+    cout << "************ TOTALES ************" << endl;
+    cout << "Tiempo de la construcción: " << time << " [ms]" << endl;
+    cout << "Tamaño de la estructura: " << (sizeDespues+sizeK2trees) << " [MB]" << endl;
+
 }
 
 
 void mktB_crear(int * temps, unsigned int n, unsigned int totalFiles){
     cout << "*** PROPUESTA B ***" << endl;
+    clock_t start = clock();
     MATRIXK2TREE edcMK2T;
     edcMK2T.n = n;
 
@@ -305,8 +314,8 @@ void mktB_crear(int * temps, unsigned int n, unsigned int totalFiles){
     // Ajustar tamaño del arreglo de valores según los encontrados.
     edcMK2T.valoresD.resize(cantVD);
 
-    unsigned int sizeAntes = size_in_bytes(edcMK2T.valoresD) + size_in_bytes(edcMK2T.valoresC);
-    sizeAntes += size_in_bytes(edcMK2T.pos);
+    double sizeAntes = size_in_mega_bytes(edcMK2T.valoresD) + size_in_mega_bytes(edcMK2T.valoresC);
+    sizeAntes += size_in_mega_bytes(edcMK2T.pos);
 
     // Ajustar valores de diferencias y temperaturas para que comiencen desde 0 y 
     // así mejorar la comresión del int_vector
@@ -320,10 +329,10 @@ void mktB_crear(int * temps, unsigned int n, unsigned int totalFiles){
     util::bit_compress(edcMK2T.valoresC);
     util::bit_compress(edcMK2T.pos);
 
-    unsigned int sizeDespues = size_in_bytes(edcMK2T.valoresD) + size_in_bytes(edcMK2T.valoresC);
-    sizeDespues += size_in_bytes(edcMK2T.pos);
+    double sizeDespues = size_in_mega_bytes(edcMK2T.valoresD) + size_in_mega_bytes(edcMK2T.valoresC);
+    sizeDespues += size_in_mega_bytes(edcMK2T.pos);
 
-    int sizeInBytesK2trees = 0;
+    double sizeK2trees = 0.0;
     edcMK2T.matricesk2 = vector<k2_tree<2>>(matrices.size());
     
     for(unsigned int i=0; i<matrices.size(); i++){
@@ -337,22 +346,29 @@ void mktB_crear(int * temps, unsigned int n, unsigned int totalFiles){
         }
         */
         edcMK2T.matricesk2[i] = k2_tree<2>(matrices[i]);
-        sizeInBytesK2trees += size_in_bytes(edcMK2T.matricesk2[i]);
+        sizeK2trees += size_in_mega_bytes(edcMK2T.matricesk2[i]);
     }
+    double time = (double)(clock() - start) / CLOCKS_PER_SEC;
+    time *= 1000;        // A milisegundos
 
-    cout << "Tamaño de int_vectors antes: " << sizeAntes/1024 << " [KB]" << endl;
-    cout << "Tamaño de int_vectors despues: " << sizeDespues/1024 << " [KB]" << endl;
+    cout << "Tamaño de int_vectors antes de bit_compress: " << sizeAntes << " [MB]" << endl;
+    cout << "Tamaño de int_vectors despues de bit_compress: " << sizeDespues << " [MB]" << endl;
 
     cout << "Temperatura mínima: " << edcMK2T.minimaTemperatura << endl;
     cout << "Diferencia mínima: " << edcMK2T.minimaDiferencia << endl;
 
     cout << "Cantidad de valores diferentes: " << edcMK2T.valoresD.size() - nxn << endl;
-    cout << "k2_trees size in KiloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
+    cout << "k2_trees size in KiloBytes: " << sizeK2trees << " [MB]" << endl;
+    
+    cout << "************ TOTALES ************" << endl;
+    cout << "Tiempo de la construcción: " << time << " [ms]" << endl;
+    cout << "Tamaño de la estructura: " << (sizeDespues+sizeK2trees) << " [MB]" << endl;
 }
 
 
 void mktC_crear(int * temps, unsigned int n, unsigned int totalFiles){
     cout << "*** PROPUESTA C ***" << endl;
+    clock_t start = clock();
     MATRIXK2TREE edcMK2T;
     edcMK2T.n = n;
 
@@ -420,8 +436,8 @@ void mktC_crear(int * temps, unsigned int n, unsigned int totalFiles){
     // Ajustar tamaño del arreglo de valores según los encontrados.
     edcMK2T.valoresD.resize(cantVD);
 
-    unsigned int sizeAntes = size_in_bytes(edcMK2T.valoresD) + size_in_bytes(edcMK2T.valoresC);
-    sizeAntes += size_in_bytes(edcMK2T.pos);
+    double sizeAntes = size_in_mega_bytes(edcMK2T.valoresD) + size_in_mega_bytes(edcMK2T.valoresC);
+    sizeAntes += size_in_mega_bytes(edcMK2T.pos);
 
     // Ajustar valores de diferencias y temperaturas para que comiencen desde 0 y 
     // así mejorar la comresión del int_vector
@@ -435,10 +451,10 @@ void mktC_crear(int * temps, unsigned int n, unsigned int totalFiles){
     util::bit_compress(edcMK2T.valoresC);
     util::bit_compress(edcMK2T.pos);
 
-    unsigned int sizeDespues = size_in_bytes(edcMK2T.valoresD) + size_in_bytes(edcMK2T.valoresC);
-    sizeDespues += size_in_bytes(edcMK2T.pos);
+    double sizeDespues = size_in_mega_bytes(edcMK2T.valoresD) + size_in_mega_bytes(edcMK2T.valoresC);
+    sizeDespues += size_in_mega_bytes(edcMK2T.pos);
 
-    int sizeInBytesK2trees = 0;
+    double sizeK2trees = 0.0;
     edcMK2T.matricesk2 = vector<k2_tree<2>>(matrices.size());
     
     for(unsigned int i=0; i<matrices.size(); i++){
@@ -452,15 +468,21 @@ void mktC_crear(int * temps, unsigned int n, unsigned int totalFiles){
         }
         */
         edcMK2T.matricesk2[i] = k2_tree<2>(matrices[i]);
-        sizeInBytesK2trees += size_in_bytes(edcMK2T.matricesk2[i]);
+        sizeK2trees += size_in_mega_bytes(edcMK2T.matricesk2[i]);
     }
+    double time = (double)(clock() - start) / CLOCKS_PER_SEC;
+    time *= 1000;        // A milisegundos
 
-    cout << "Tamaño de int_vectors antes: " << sizeAntes/1024 << " [KB]" << endl;
-    cout << "Tamaño de int_vectors despues: " << sizeDespues/1024 << " [KB]" << endl;
+    cout << "Tamaño de int_vectors antes de bit_compress: " << sizeAntes << " [MB]" << endl;
+    cout << "Tamaño de int_vectors despues de bit_compress: " << sizeDespues << " [MB]" << endl;
 
     cout << "Temperatura mínima: " << edcMK2T.minimaTemperatura << endl;
     cout << "Diferencia mínima: " << edcMK2T.minimaDiferencia << endl;
 
     cout << "Cantidad de valores diferentes: " << edcMK2T.valoresD.size() - nxn << endl;
-    cout << "k2_trees size in KiloBytes: " << sizeInBytesK2trees/1024 << " [KB]" << endl;
+    cout << "k2_trees size in KiloBytes: " << sizeK2trees << " [MB]" << endl;
+    
+    cout << "************ TOTALES ************" << endl;
+    cout << "Tiempo de la construcción: " << time << " [ms]" << endl;
+    cout << "Tamaño de la estructura: " << (sizeDespues+sizeK2trees) << " [MB]" << endl;
 }

@@ -6,6 +6,7 @@
 #include <cstring>
 #include <sdsl/int_vector_mapper.hpp>
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 using namespace sdsl;
@@ -35,7 +36,7 @@ int main(int argc, char const *argv[]){
         while ((archivo = readdir(carpeta))) {
             // Se explora el directorio archivo por archivo
             string line;
-            char filename[strlen(archivo->d_name) + strlen(argv[1] + 2)];
+            char filename[strlen(archivo->d_name) + strlen(argv[1]) + 2];
             strcpy(filename, argv[1]);
             strcat(filename, "/");
             strcat(filename, archivo->d_name);
@@ -51,14 +52,14 @@ int main(int argc, char const *argv[]){
                     for(int i=0; i<n && ptemps < cantTemps; i++){
                         sscanf(linea," %d%n", &temps[ptemps], &offset);
                         linea += offset;
-                        cout << temps[ptemps] << "  ";
+                        //cout << temps[ptemps] << "  ";
                         // Cada entero se guarda en un arreglo
                     	if(temps[ptemps] > max_temp){
                     		max_temp = temps[ptemps];
                     	}
                     	ptemps++;
                     }
-                    cout << endl;
+                    //cout << endl;
                     delete(lin_respaldo);
                 }
                 myfile.close();
@@ -75,19 +76,29 @@ int main(int argc, char const *argv[]){
             bits++;
         }
         printf("Bits necesarios: %d\n", bits);
+
+        clock_t start = clock();
         // Se crea el bit_vector con los valores desde temps
         int_vector<> iv_t(cantTemps);
         for(int i=0; i<cantTemps; i++){
             iv_t[i] = temps[i];
         }
-        free(temps);
-        // Mostrar información de la operación
-        printf("width antes de bit_compress: %d\n", iv_t.width());
-        cout << "int_vector in mega bytes: " << size_in_mega_bytes(iv_t) << "[MB]" << endl;
+        int bitsPreCompress = iv_t.width();
+        double mBytesPreCompress = size_in_mega_bytes(iv_t);
         util::bit_compress(iv_t);
-        printf("width despues de bit_compress: %d\n", iv_t.width());
+        double time = (double)(clock() - start) / CLOCKS_PER_SEC;
+        time *= 1000;        // A milisegundos
+        // Mostrar información de la operación
+        printf("width antes de bit_compress: %d bits.\n", bitsPreCompress);
+        cout << "int_vector in mega bytes: " << mBytesPreCompress << "[MB]" << endl;
+        printf("width despues de bit_compress: %d bits.\n", iv_t.width());
         cout << "int_vector in mega bytes: " << size_in_mega_bytes(iv_t) << "[MB]" << endl;
+        cout << "Cantidad de temperaturas guardadas: " << iv_t.size() << " temperaturas." << endl;
+        printf("************ TOTALES ************\n");
+        cout << "Tiempo de la construcción: " << time << " [ms]" << endl;
+        cout << "Memoria requerida en la representación: " << size_in_mega_bytes(iv_t) << "[MB]" << endl;
 
+        free(temps);
     }else{
         perror ("Error al abrir el directorio ");
     }
