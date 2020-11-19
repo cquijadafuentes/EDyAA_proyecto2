@@ -4,9 +4,12 @@ CFLAGS = -Wall -g -O2 -std=c++11 -DNDEBUG -O3 -I/home/vbm_f/include -L/home/vbm_
 
 LIBS =-lsdsl -ldivsufsort -ldivsufsort64
 
-BINS=ejercicio_2 ejercicio_3 ejercicio_4 ejercicio_5 ejercicio_6
+BINS=ejercicio_1 ejercicio_2 ejercicio_3 ejercicio_4 ejercicio_5 ejercicio_6
 
 all: clean ${BINS}
+
+ejercicio_1:
+	${GPP} ${CFLAGS} -o ejercicio_1 ejercicio_1.cpp ${LIBS}
 
 ejercicio_2:
 	${GPP} ${CFLAGS} -o ejercicio_2 ejercicio_2.cpp ${LIBS}
