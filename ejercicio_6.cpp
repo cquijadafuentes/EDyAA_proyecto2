@@ -238,7 +238,7 @@ void mktA_crear(int * temps, unsigned int n, unsigned int totalFiles){
     cout << "Diferencia mínima: " << edcMK2T.minimaDiferencia << endl;
 
     cout << "Cantidad de valores diferentes: " << edcMK2T.valoresD.size() - nxn << endl;
-    cout << "k2_trees size in KiloBytes: " << sizeK2trees << " [MB]" << endl;
+    cout << "k2_trees size: " << sizeK2trees << " [MB]" << endl;
     
     cout << "************ TOTALES ************" << endl;
     cout << "Tiempo de la construcción: " << time << " [ms]" << endl;
@@ -358,7 +358,7 @@ void mktB_crear(int * temps, unsigned int n, unsigned int totalFiles){
     cout << "Diferencia mínima: " << edcMK2T.minimaDiferencia << endl;
 
     cout << "Cantidad de valores diferentes: " << edcMK2T.valoresD.size() - nxn << endl;
-    cout << "k2_trees size in KiloBytes: " << sizeK2trees << " [MB]" << endl;
+    cout << "k2_trees size: " << sizeK2trees << " [MB]" << endl;
     
     cout << "************ TOTALES ************" << endl;
     cout << "Tiempo de la construcción: " << time << " [ms]" << endl;
@@ -480,7 +480,7 @@ void mktC_crear(int * temps, unsigned int n, unsigned int totalFiles){
     cout << "Diferencia mínima: " << edcMK2T.minimaDiferencia << endl;
 
     cout << "Cantidad de valores diferentes: " << edcMK2T.valoresD.size() - nxn << endl;
-    cout << "k2_trees size in KiloBytes: " << sizeK2trees << " [MB]" << endl;
+    cout << "k2_trees size: " << sizeK2trees << " [MB]" << endl;
     
     cout << "************ TOTALES ************" << endl;
     cout << "Tiempo de la construcción: " << time << " [ms]" << endl;
